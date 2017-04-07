@@ -26,8 +26,8 @@ breakpt = IPython.core.debugger.set_trace
 CWD=os.path.dirname(os.path.abspath(__file__))
 MODNAME = os.path.splitext(os.path.basename(__file__))[0]
 
-PROF_INNER = 'egg-profile_inner.csv'
-PROF_OUTER = 'egg-profile_outer.csv'
+PROF_INNER = os.path.join('data', 'egg-profile_inner.csv')
+PROF_OUTER = os.path.join('data', 'egg-profile_outer.csv')
 SEGMENTS = 48
 
 HEADER = '''
