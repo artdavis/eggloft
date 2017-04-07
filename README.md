@@ -6,8 +6,7 @@ Eggloft Egg Rockets Code Repository
 
 `eggcarrier_1.py` contains the code for generating the Egg Shell Casing
 Nose Cone. You will need to have
-[SolidPython](https://github.com/SolidCode/SolidPython)
-and [Pandas](http://pandas.pydata.org/) available.
+[SolidPython](https://github.com/SolidCode/SolidPython) available.
 
 The generated CAD files require [OpenSCAD](http://www.openscad.org/).
 

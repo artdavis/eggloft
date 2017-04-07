@@ -18,7 +18,6 @@ Set FILEMODE to either 'direct' or 'customizer'.
              work with the Thingiverse Customizer.
 """
 import os
-import pandas as pd
 
 # Solidpython
 import solid as sol
@@ -72,9 +71,30 @@ coupler_extra = 50.0;
 wall_th = 2.0;
 '''.format(SEGMENTS)
 
+# Get x, y tuples from the csv file
+def read_csv(filename, cols=[0, 1]):
+    '''
+    Parameters
+    ----------
+    filename : str
+        Filepath to the csv file to read
+    cols : list-like, optional
+        Which columns to use for the x and y values respectively
+        (default: [0, 1])
+    '''
+    coords = []
+    with open(filename, 'r') as fid:
+        for fline in fid:
+            try:
+                pts = fline.split(',')
+                coords.append([float(pts[cols[0]]), float(pts[cols[1]])])
+            except ValueError:
+                # Skip any lines that won't convert to floats (i.e. comments)
+                pass
+    return coords
+
 # Read the outer profile for the shell
-shell_df = pd.read_csv(PROF_OUTER)
-shell = sol.polygon(list(zip(shell_df['x'], shell_df['y'])))
+shell = sol.polygon(read_csv(PROF_OUTER))
 # Rotational extrusion to make the solid.
 # rotate_extrude takes the profile on the XY plane and uses it as the
 # profile in the XZ plane for revolution about the Z-axis
@@ -118,7 +138,7 @@ def make_customizer():
     global coupler_fitting_h, coupler_fitting_shift
     global hole_len, hole_h, hole_diam, hole_shift
     global OUTFILE
-    OUTFILE = 'Customizable_hollow_egg_carrier_tmp.scad'
+    OUTFILE = 'Customizable_hollow_egg_carrier.scad'
     coupler_fitting_diam = 'coupler_fitting_diam'
     coupler_shoulder_h = 'coupler_shoulder_len + coupler_extra'
     coupler_shoulder_diam = 'coupler_shoulder_diam'
@@ -155,8 +175,7 @@ coupler -= c_hole # Make the hole
 geom = shell + coupler
 
 # Core out the inner cavity
-cav_df = pd.read_csv(PROF_INNER)
-cav = sol.polygon(list(zip(cav_df['x'], cav_df['y'])))
+cav = sol.polygon(read_csv(PROF_INNER))
 cav = sol.rotate_extrude()(cav)
 
 geom -= cav
