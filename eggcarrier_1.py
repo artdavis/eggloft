@@ -12,10 +12,6 @@ Licensed under the MIT License
 
 2017-04-02 - File creation
 
-Set FILEMODE to either 'direct' or 'customizer'.
-'direct' makes an OpenSCAD file without any variable names.
-'customizer' preserves variable names and creates an OpenSCAD file that will
-             work with the Thingiverse Customizer.
 """
 import os
 
@@ -33,8 +29,6 @@ MODNAME = os.path.splitext(os.path.basename(__file__))[0]
 PROF_INNER = 'egg-profile_inner.csv'
 PROF_OUTER = 'egg-profile_outer.csv'
 SEGMENTS = 48
-
-FILEMODE = 'customizer'
 
 HEADER = '''
 // Copyright 2017 Arthur Davis (thingiverse.com/artdavis)
@@ -100,63 +94,24 @@ shell = sol.polygon(read_csv(PROF_OUTER))
 # profile in the XZ plane for revolution about the Z-axis
 shell = sol.rotate_extrude(convexity=10)(shell)
 
+# Variables...
+# The following variables need to be defined in the HEADER string
+# for OpenSCAD to have access to them in the generated program:
+# coupler_shoulder_len, coupler_shoulder_diam, coupler_fitting_len
+# coupler_fitting_diam, coupler_extra, delta, wall_th
+OUTFILE = 'Customizable_hollow_egg_carrier.scad'
+coupler_fitting_diam = 'coupler_fitting_diam'
+coupler_shoulder_h = 'coupler_shoulder_len + coupler_extra'
+coupler_shoulder_diam = 'coupler_shoulder_diam'
+coupler_shoulder_shift = '-coupler_shoulder_len'
+coupler_fitting_h = 'coupler_fitting_len + delta'
+coupler_fitting_shift = '-(coupler_shoulder_len + coupler_fitting_len)'
+hole_len = 'coupler_shoulder_len + coupler_extra + coupler_fitting_len'
+hole_h = hole_len + ' + delta'
+hole_diam = 'coupler_fitting_diam - 2 * wall_th'
+hole_shift = '-(coupler_shoulder_len + coupler_fitting_len + delta/2.)'
+
 # Make the coupler
-def make_direct():
-    # For making scad file directly for OpenSCAD
-    global delta, coupler_shoulder_len, coupler_shoulder_diam
-    global coupler_fitting_len, coupler_fitting_diam, coupler_extra
-    global coupler_shoulder_h, coupler_shoulder_shift
-    global coupler_fitting_h, coupler_fitting_shift
-    global wall_th, hole_len, hole_h, hole_diam, hole_shift
-    global OUTFILE
-    OUTFILE = 'hollow_egg_carrier.scad'
-    # Incremental offset to make good overlap for CSG operations
-    delta = 0.1
-    coupler_shoulder_len = 6.
-    coupler_shoulder_diam = 18.7
-    coupler_fitting_len = 12.
-    coupler_fitting_diam = 17.9
-    coupler_extra = 50.
-
-    coupler_shoulder_h = coupler_shoulder_len + coupler_extra
-    coupler_shoulder_shift = -coupler_shoulder_len
-
-    coupler_fitting_h = coupler_fitting_len + delta
-    coupler_fitting_shift = -(coupler_shoulder_len + coupler_fitting_len)
-
-    wall_th = 2.0
-    hole_len = coupler_shoulder_len + coupler_extra + coupler_fitting_len
-    hole_h = hole_len + delta
-    hole_diam = coupler_fitting_diam - 2 * wall_th
-    hole_shift = -(coupler_shoulder_len + coupler_fitting_len + delta/2.)
-
-def make_customizer():
-    # For making scad file for use with Thingiverse Customizer
-    global coupler_shoulder_diam
-    global coupler_fitting_diam
-    global coupler_shoulder_h, coupler_shoulder_shift
-    global coupler_fitting_h, coupler_fitting_shift
-    global hole_len, hole_h, hole_diam, hole_shift
-    global OUTFILE
-    OUTFILE = 'Customizable_hollow_egg_carrier.scad'
-    coupler_fitting_diam = 'coupler_fitting_diam'
-    coupler_shoulder_h = 'coupler_shoulder_len + coupler_extra'
-    coupler_shoulder_diam = 'coupler_shoulder_diam'
-    coupler_shoulder_shift = '-coupler_shoulder_len'
-    coupler_fitting_h = 'coupler_fitting_len + delta'
-    coupler_fitting_shift = '-(coupler_shoulder_len + coupler_fitting_len)'
-    hole_len = 'coupler_shoulder_len + coupler_extra + coupler_fitting_len'
-    hole_h = hole_len + ' + delta'
-    hole_diam = 'coupler_fitting_diam - 2 * wall_th'
-    hole_shift = '-(coupler_shoulder_len + coupler_fitting_len + delta/2.)'
-
-if 'direct' == FILEMODE.lower():
-    make_direct()
-elif 'customizer' == FILEMODE.lower():
-    make_customizer()
-else:
-    raise ValueError("Unknown FILEMODE: {}".format(FILEMODE))
-
 coupler_shoulder = sol.cylinder(h=coupler_shoulder_h, d=coupler_shoulder_diam)
 coupler_shoulder = sol.translate(
         v=(0, 0, coupler_shoulder_shift))(coupler_shoulder)
@@ -194,21 +149,19 @@ sol.scad_render_to_file(geom, filepath=OUTFILE,
         include_orig_code=False)
 
 # Post-Processor...
-# If we made a 'customizer' type of file, the variables have been preserved
-# but are surrounded by double-quotes (") in the OpenSCAD file. These need
-# to be stripped out for the file to work.
+# The variables have been preserved but are surrounded by double-quotes (") in
+# the OpenSCAD file. These need to be stripped out for the file to work.
 filestring = ''
-if 'customizer' == FILEMODE.lower():
-    with open(OUTFILE, 'r') as fid:
-        for fline in fid:
-            if fline.startswith('//') or fline.startswith('/*'):
-                # Leave comment lines as is
-                filestring += fline
-            else:
-                # Strip all occurrences of double quotes in code context
-                filestring += fline.replace('"', '')
+with open(OUTFILE, 'r') as fid:
+    for fline in fid:
+        if fline.startswith('//') or fline.startswith('/*'):
+            # Leave comment lines as is
+            filestring += fline
+        else:
+            # Strip all occurrences of double quotes in code context
+            filestring += fline.replace('"', '')
 
-    # Overwrite OUTFILE with the post-processed code
-    with open (OUTFILE, 'w') as fid:
-        fid.write(filestring)
+# Overwrite OUTFILE with the post-processed code
+with open (OUTFILE, 'w') as fid:
+    fid.write(filestring)
 
