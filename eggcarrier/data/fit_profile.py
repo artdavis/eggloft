@@ -111,17 +111,29 @@ dfx['theta'][dfx['theta'].isnull()] = 0
 dfx['theta_deg'] = np.degrees(dfx['theta'])
 dfx['cos'] = np.cos(dfx['theta'])
 dfx['sin'] = np.sin(dfx['theta'])
-dfx['r2'] = (np.cos(dfx['theta']))**2 * dfx['r'].max()
+rmax = dfx['r'].max()
+dfx['r2'] = (np.cos(dfx['theta']))**2 * rmax
 dfx['x2'] = dfx['r2'] * dfx['cos']
 dfx['y2'] = dfx['r2'] * dfx['sin'] * 0.9
 # Juggle coordinates to stand up the egg profile
-dfx['x2'] = np.abs(dfx['x2'] - dfx['x2'].max())
-tmpx = dfx['x2'].copy()
-dfx['x2'] = dfx['y2']
-dfx['y2'] = tmpx
+#dfx['x2'] = np.abs(dfx['x2'] - dfx['x2'].max())
+#tmpx = dfx['x2'].copy()
+#dfx['x2'] = dfx['y2']
+#dfx['y2'] = tmpx
+rat1 = dfx['x']**2 / dfx['r']**2
+dfx['y3'] = 0.9 * rmax * rat1 * np.sqrt(1 - rat1)
 
-df2 = dfx.loc[:, 'x2':'y2']
-dfx.plot.scatter(['x', 'x2'], ['y', 'y2'])
+df3 = dfx.loc[:, :'sin'].copy()
+df3['x2'] = rmax * df3['cos']**3
+df3['y2'] = 0.9 * rmax * df3['cos']**2 * df3['sin']
+df3['x3'] = df3['x2'].copy()
+rat2 = (df3['x3'] / rmax) ** (2./3.)
+df3['y3'] = 0.9 * rmax * rat2 * np.sqrt(1 - rat2)
+
+#dfx.plot.scatter(['x', 'x2'], ['y', 'y2'])
+#df3.plot.scatter(['x', 'x2', 'x', ], ['y', 'y2', 'y3'])
+df3.plot.scatter(['x', 'x3'], ['y', 'y3'])
+#dfx.plot.scatter(['x', 'x'], ['y', 'y3'])
 plt.show()
 
 
