@@ -14,6 +14,7 @@ Licensed under the MIT License
 
 """
 import os
+import numpy as np
 
 # Solidpython
 import solid as sol
@@ -29,6 +30,8 @@ MODNAME = os.path.splitext(os.path.basename(__file__))[0]
 PROF_INNER = os.path.join('data', 'egg-profile_inner.csv')
 PROF_OUTER = os.path.join('data', 'egg-profile_outer.csv')
 SEGMENTS = 48
+WALL_TH = 2.0
+LENGTH = 78.0 # Shell profile length
 
 HEADER = '''
 // Copyright 2017 Arthur Davis (thingiverse.com/artdavis)
@@ -53,7 +56,7 @@ coupler_fitting_diam = 17.9; // [10.0:0.2:50.0]
 
 /* [Hidden] */
 // Special variables for facets/arcs
-$fn = {};
+$fn = {SEGMENTS};
 
 // Incremental offset to make good overlap for CSG operations
 delta = 0.1;
@@ -62,8 +65,8 @@ delta = 0.1;
 coupler_extra = 50.0;
 
 // Wall thickness of the fitting
-wall_th = 2.0;
-'''.format(SEGMENTS)
+wall_th = {WALL_TH};
+'''.format(**locals())
 
 # Get x, y tuples from the csv file
 def read_csv(filename, cols=[0, 1]):
@@ -87,8 +90,30 @@ def read_csv(filename, cols=[0, 1]):
                 pass
     return coords
 
+def egg(length=LENGTH, nsteps=100, offset=0):
+    '''
+    Parameters
+    ----------
+    length : float
+        The length of the egg shell. Typical outer shell length = 78.
+    nsteps : int
+        Number of points to sample over the profile
+    offset : float
+        How much to offset from the origin (set to the wall thickness)
+    '''
+    xpts = np.linspace(0, length, nsteps)
+    term1 = (1 - xpts / length)**(2/3.)
+    profile = 0.9 * length * term1 * np.sqrt(1 - term1)
+    # For the profile to "stand up" swap the axes
+    coords = list(zip(profile, xpts + offset))
+    # Add origin point as the last point to close the profile
+    coords.append((0., offset))
+    return coords
+
 # Read the outer profile for the shell
-shell = sol.polygon(read_csv(PROF_OUTER))
+#shell = sol.polygon(read_csv(PROF_OUTER))
+# Generate the outer profile for the shell
+shell = sol.polygon(egg(LENGTH))
 # Rotational extrusion to make the solid.
 # rotate_extrude takes the profile on the XY plane and uses it as the
 # profile in the XZ plane for revolution about the Z-axis
@@ -130,7 +155,8 @@ coupler -= c_hole # Make the hole
 geom = shell + coupler
 
 # Core out the inner cavity
-cav = sol.polygon(read_csv(PROF_INNER))
+#cav = sol.polygon(read_csv(PROF_INNER))
+cav = sol.polygon(egg(length=LENGTH-2*WALL_TH, offset=WALL_TH))
 cav = sol.rotate_extrude()(cav)
 
 geom -= cav
