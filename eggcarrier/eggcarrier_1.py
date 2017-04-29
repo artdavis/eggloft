@@ -7,6 +7,9 @@
    :synopsis: Hollow Egg Carrier CAD Model
 .. moduleauthor:: Arthur Davis <art.davie@gmail.com>
 
+Preliminary generation of hollow egg carrier nose cone model to
+build start with.
+
 Copyright 2017 Arthur Davis (art.davis@gmail.com)
 Licensed under the MIT License
 

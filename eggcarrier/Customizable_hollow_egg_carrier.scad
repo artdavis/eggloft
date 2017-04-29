@@ -9,6 +9,9 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+// Optimize view for Makerbot Customizer:
+// preview[view:south east, tilt:bottom]
+
 // Length of the Egg Casing Shell
 case_length = 78; // [60:2:100]
 // Coupler Shoulder Length
