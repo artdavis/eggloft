@@ -12,8 +12,10 @@
 // Optimize view for Makerbot Customizer:
 // preview[view:south east, tilt:bottom]
 
+// Choose geometry:
+part = "A-Side"; // [A-Side, B-Side, Snap]
 // Length of the Egg Casing Shell
-case_length = 78; // [60:2:100]
+case_length = 80; // [60:2:100]
 // Coupler Shoulder Length
 coupler_shoulder_len = 6.0; // [1.0:1.0:25.0]
 // Coupler Shoulder Diameter
@@ -24,10 +26,20 @@ coupler_fitting_len = 12.0; // [5.0:1.0:25.0]
 coupler_fitting_diam = 17.9; // [10.0:0.2:50.0]
 // Wall thickness
 wall_th = 2.0; // [1.0:0.2:4.0]
-
-boss_diam = 5;
-pin_diam = 2.2;
-pin_depth= 3.6;
+// Alignment boss diameters
+boss_diam = 5; // [2.0:0.2:10.0]
+// Alignment pin hole dimaters
+pin_diam = 2.2; // [1.0:0.2:6.0]
+// Depth of alignment pin holes
+pin_depth= 4.0; // [1.0:0.2:10.0]
+// Width of the snapping feature boss
+snap_boss_wd = 10.0; // [2.0:1.0:20.0]
+// Height of the snapping feature boss
+snap_boss_ht = 3.0; // [1.0:1.0:10.0]
+// Thickness of the snapping feature
+snap_th = 2.0; // [1.0:1.0:6.0]
+// Width of the snapping feature
+snap_wd = 8.0; // [2.0:1.0:18.0]
 
 /* [Hidden] */
 // Special variables for facets/arcs
@@ -35,6 +47,9 @@ $fn = 48;
 
 // Incremental offset to make good overlap for CSG operations
 delta = 0.1;
+
+// Amount to undersize features so they'll fit into cutouts
+fit_tol = 0.2;
 
 // Coupler extension to overlap with egg shell
 coupler_extra = 50.0;
@@ -130,13 +145,79 @@ module egg_boss() {
           for(x = stud_xpts)stud(boss_diam, boss_diam, case_length, x);
             }
         egg_trim();
+    }
+}
+    
+// Create boss feature for snap geometry (A-Side)
+module snap_boss_a(){
+    difference() {
+        translate(v = [case_length - snap_boss_ht - wall_th, -snap_boss_wd/2, 0]) {
+            cube(size = [snap_boss_ht, snap_boss_wd, wall_th]);
+        }
+        egg_trim();
+    }
+}
+
+
+// Create boss feature for snap geometry (B-Side)
+module snap_boss_b(){
+    difference() {
+        difference() {
+            translate(v = [case_length - 2*snap_boss_ht - wall_th - fit_tol, -snap_boss_wd/2,0]) {
+                cube(size = [2*snap_boss_ht + fit_tol, snap_boss_wd, case_length]);
+            }
+            translate(v=[case_length - 2*snap_th - snap_boss_ht - fit_tol, -snap_wd/2, 0]) {
+            cube(size = [snap_th, snap_wd, case_length]);
+            }
+        }
+        egg_trim();
+    }
+}
+
+module make_nosecone() {
+    difference() {
+        union() {
+            main_body();
+            if (part == "A-Side") {
+                snap_boss_a();
+            } else if (part == "B-Side") {
+                snap_boss_b();
+            }
+            egg_boss(diam=boss_diam);
+        }
+        for(x = stud_xpts)stud(boss_diam, pin_diam, pin_depth, x);
+    }
+}
+
+module make_snap() {
+    slen = 3 * wall_th; // Snap length
+    sht = 2*wall_th; // Snap height
+    sth = wall_th - fit_tol; // Snap thickness
+    swd = snap_wd - fit_tol; // Snap width
+    union() {
+        cube(size = [sth, slen, swd]);
+        difference() {
+            translate(v=[0, slen, 0]){
+                cube(size = [sht, sth, swd]);
+            }
+            translate(v=[sht, slen, -delta/2]){
+                rotate(a=[0, 0, 45])
+                cube(size = [2*sth, 2*sth, swd + delta]);
+            }
         }
     }
-
-difference() {
-    union() {
-        main_body();
-        egg_boss(diam=boss_diam);
-    }
-    for(x = stud_xpts)stud(boss_diam, pin_diam, pin_depth, x);
 }
+
+// Allow MakerBot Customizer to generate STL based on part selection
+module print_part() {
+    if (part == "Snap") {
+        make_snap();
+    } else {
+        make_nosecone();
+    }
+}
+
+//part = "A-Side";
+//part = "B-Side";
+//part = "Snap";
+print_part();
