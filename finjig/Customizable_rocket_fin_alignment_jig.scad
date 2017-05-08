@@ -13,7 +13,7 @@
 // onto model rockets.
 
 // Optimize view for Makerbot Customizer:
-// preview[view:south east, tilt:side]
+// preview[view:south east, tilt:top diagonal]
 
 // Number of fins
 nfins = 3; // [2:1:6]
@@ -22,21 +22,21 @@ base_diam = 100; // [0:10:200]
 // Wall feature thickness
 wall_th = 2.0; // [0.2:0.2:6.0]
 // Body tube inner diameter
-tube_id = 17.9; // [10.0:0.1:50.0]
+tube_id = 23.8; // [10.0:0.1:50.0]
 // Length of the body tube insert
-insert_len = 25.4; // [10:0.2:60]
+insert_len = 25; // [10:0.2:60]
 // Thickness at end of body tube insert to act as a stop
 stop_th = 1.0; // [0.2:0.1:5]
 // Length of the body tube stop
-stop_len = 10; // [1:0.2:20]
+stop_len = 25; // [1:0.2:20]
 // Slot width to fit thickness of rocket fins
-slot_width = 2.4; // [0.2:0.1:10]
+slot_width = 2.6; // [0.2:0.1:10]
 // Clearance between rocket body and fin alignment bosses
 boss_clear = 4.0; // [0:1:20]
 // How far below the end of the body tube the fins extend
 slot_extend = 0; // [0:1:60]
 // Height of fin alignment bosses
-fbht = 30; // [10:1:100]
+fbht = 50; // [10:1:100]
 // Clearance for glue drips on the stop and insert
 glue_clear = 1.2; // [0:0.2:3]
 // Clearance width for accomodating an engine hook

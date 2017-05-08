@@ -19,7 +19,7 @@ case_length = 80; // [60:2:100]
 // Coupler Shoulder Length
 coupler_shoulder_len = 6.0; // [1.0:1.0:25.0]
 // Coupler Shoulder Diameter
-coupler_shoulder_diam = 18.7; // [10.0:0.2:50.0]
+coupler_shoulder_diam = 22; // [10.0:0.2:50.0]
 // Fitting Shoulder Length
 coupler_fitting_len = 12.0; // [5.0:1.0:25.0]
 // Fitting Shoulder Diameter
