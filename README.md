@@ -13,6 +13,7 @@ The generated CAD files require [OpenSCAD](http://www.openscad.org/).
 The project page for this model is on [Thingiverse](http://www.thingiverse.com/thing:2228825).
 
 ## Links
+* Tumblr: eggloft.tumblr.com
 * Albums on Google Photos:
   * Eggloft 2017: https://goo.gl/photos/V68WYKtxY2Nt3baK6
   * Eggloft 2015: https://photos.app.goo.gl/3hsBzRhmDFfbkz3C2
@@ -29,6 +30,7 @@ The project page for this model is on [Thingiverse](http://www.thingiverse.com/t
   * Eggloft 2002: https://photos.app.goo.gl/xSiJ9lSXsFyGbqeu1
   * Eggloft 2001: https://photos.app.goo.gl/cQvI1SkxMte1TG1L2
 * Eggloft picture on Flickr: https://www.flickr.com/photos/artdavis/collections/72157608394415360/
+* Github: https://github.com/artdavis/eggloft
 
 ## License
 
