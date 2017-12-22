@@ -29,7 +29,7 @@ The project page for this model is on [Thingiverse](http://www.thingiverse.com/t
   * Eggloft 2003: https://photos.app.goo.gl/ckdh42p6zTyQmZcu2
   * Eggloft 2002: https://photos.app.goo.gl/xSiJ9lSXsFyGbqeu1
   * Eggloft 2001: https://photos.app.goo.gl/cQvI1SkxMte1TG1L2
-* Eggloft picture on Flickr: https://www.flickr.com/photos/artdavis/collections/72157608394415360/
+* Eggloft pictures on Flickr: https://www.flickr.com/photos/artdavis/collections/72157608394415360/
 * Github: https://github.com/artdavis/eggloft
 
 ## License
