@@ -12,6 +12,24 @@ The generated CAD files require [OpenSCAD](http://www.openscad.org/).
 
 The project page for this model is on [Thingiverse](http://www.thingiverse.com/thing:2228825).
 
+## Links
+* Albums on Google Photos:
+  * Eggloft 2017: https://goo.gl/photos/V68WYKtxY2Nt3baK6
+  * Eggloft 2015: https://photos.app.goo.gl/3hsBzRhmDFfbkz3C2
+  * Eggloft 2012: https://photos.app.goo.gl/SX4SqTCujdt8vBvD2
+  * Eggloft 2011: https://photos.app.goo.gl/63fklDRsVJnDgvzv1
+  * Eggloft 2010: https://photos.app.goo.gl/uvdos1Zgeo4pxb0t1
+  * Eggloft 2009: https://photos.app.goo.gl/z1fv5QlUm2J9o8sF2
+  * Eggloft 2008: https://photos.app.goo.gl/Hm3qiV16KIw7XGTV2
+  * Eggloft 2007: https://photos.app.goo.gl/Spgjn0cDujTmJkgr2
+  * Eggloft 2006: https://photos.app.goo.gl/T7xRKUrmJ8AeO1Uo2
+  * Eggloft 2005: https://photos.app.goo.gl/GUW8ReE4xvdOMU9S2
+  * Eggloft 2004: https://photos.app.goo.gl/hD10HAPUoc5vVyDw2
+  * Eggloft 2003: https://photos.app.goo.gl/ckdh42p6zTyQmZcu2
+  * Eggloft 2002: https://photos.app.goo.gl/xSiJ9lSXsFyGbqeu1
+  * Eggloft 2001: https://photos.app.goo.gl/cQvI1SkxMte1TG1L2
+* Eggloft picture on Flickr: https://www.flickr.com/photos/artdavis/collections/72157608394415360/
+
 ## License
 
 MIT License
